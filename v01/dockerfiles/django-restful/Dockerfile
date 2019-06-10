@@ -3,6 +3,9 @@ LABEL maintainer="info@optimum-web.com"
 
 ENV TZ=America/Los_Angeles
 RUN  groupadd -r -g 2000 django; useradd -r -u 2000 -g 2000 -m -c "app account" -d /home/django -s /bin/bash django
+RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+curl locales gcc libpq5 git curl lsof libpq-dev libffi-dev supervisor unzip make procps libc6-dev \
+uwsgi uwsgi-src uuid-dev libcap-dev && apt-get clean && rm -rf /var/lib/apt/lists/*;
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
