@@ -19,4 +19,4 @@ WORKDIR /app/django_restful
 RUN django-admin startapp quickstart
 COPY configs/serializers.py /app/django_restful/quickstart/serializers.py
 COPY configs/views.py /app/django_restful/quickstart/views.py
-COPY config/settings.py /app/django_restful/django_restful/settings.py
+COPY configs/settings.py /app/django_restful/django_restful/settings.py
