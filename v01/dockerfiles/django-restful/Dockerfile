@@ -7,6 +7,8 @@ RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install --no-ins
 curl locales gcc libpq5 git curl lsof libpq-dev libffi-dev supervisor unzip make procps libc6-dev \
 uwsgi uwsgi-src uuid-dev libcap-dev && apt-get clean && rm -rf /var/lib/apt/lists/*;
 
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
