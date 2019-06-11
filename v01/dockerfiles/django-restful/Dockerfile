@@ -14,7 +14,6 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN PYTHON=python3.7 uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python37"
-RUN mv python37_plugin.so /usr/lib/uwsgi/plugins/python37_plugin.so
 
 
 WORKDIR /app
