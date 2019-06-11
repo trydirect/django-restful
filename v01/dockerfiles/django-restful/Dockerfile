@@ -14,6 +14,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN PYTHON=python3.7 uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python37"
+RUN mv python37_plugin.so /usr/lib/uwsgi/plugins/python37_plugin.so
 
 
 WORKDIR /app
@@ -28,3 +29,4 @@ RUN django-admin startapp quickstart
 COPY configs/serializers.py /app/django_restful/quickstart/serializers.py
 COPY configs/views.py /app/django_restful/quickstart/views.py
 COPY configs/settings.py /app/django_restful/django_restful/settings.py
+COPY config/urls.py /app/django_restful/django_restful/urls.py
