@@ -22,11 +22,11 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY supervisord.conf /etc/supervisord.conf
-# 
-RUN django-admin startproject django_restful
-WORKDIR /app/django_restful
+#
+RUN django-admin startproject djangorest
+WORKDIR /app/djangorest
 RUN django-admin startapp quickstart
-COPY configs/serializers.py /app/django_restful/quickstart/serializers.py
-COPY configs/views.py /app/django_restful/quickstart/views.py
-COPY configs/settings.py /app/django_restful/django_restful/settings.py
-COPY configs/urls.py /app/django_restful/django_restful/urls.py
+COPY configs/serializers.py /app/djangorest/quickstart/serializers.py
+COPY configs/views.py /app/djangorest/quickstart/views.py
+COPY configs/settings.py /app/djangorest/djangorest/settings.py
+COPY configs/urls.py /app/djangorest/djangorest/urls.py
