@@ -28,4 +28,4 @@ RUN django-admin startapp quickstart
 COPY src/backend/djangorest /app/djangorest
 COPY configs/apidoc.json /app/djangorest
 COPY scripts/apidoc.sh  /app/djangorest
-RUN chmox +x /app/djangorest/apidoc.sh
+RUN chmod +x /app/djangorest/apidoc.sh
