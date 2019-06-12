@@ -22,7 +22,7 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY supervisord.conf /etc/supervisord.conf
-
+# 
 RUN django-admin startproject django_restful
 WORKDIR /app/django_restful
 RUN django-admin startapp quickstart
