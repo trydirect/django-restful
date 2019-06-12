@@ -23,10 +23,9 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY supervisord.conf /etc/supervisord.conf
 #
-RUN django-admin startproject djangorest
 WORKDIR /app/djangorest
 RUN django-admin startapp quickstart
-COPY configs/serializers.py /app/djangorest/quickstart/serializers.py
-COPY configs/views.py /app/djangorest/quickstart/views.py
-COPY configs/settings.py /app/djangorest/djangorest/settings.py
-COPY configs/urls.py /app/djangorest/djangorest/urls.py
+COPY src/backend/djangorest /app/djangorest
+COPY configs/apidoc.json /app/djangorest
+COPY scripts/apidoc.sh  /app/djangorest
+RUN chmox +x /app/djangorest/apidoc.sh
