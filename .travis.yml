@@ -1,0 +1,36 @@
+language: python
+python:
+- 2.7
+env:
+  matrix:
+  - DOCKER_CONTENT_TRUST=0
+  global:
+  - secure: Tim04yssKINbIldArD1UKIuQWmyHopgNIpv1o4SyAaUn6M4OT70N/jjha9ujF8EXDjzEKGAerz/effNRyouEi/9MqQoR8j4Vucz4hUmAI4kjK7e4ExGkkz5yyL+8mK9IcLCK12p5CjdWdGVhuxB+ftxruOCNMcuhy1gZJeqr81wnmbTRP9MUQaHgmrRD99OVlcRngoS5b4tjyIiRPSFp3ISExWDAnDuaTuGQWzXoef5CdNbSqSi+kNTlhZCVRNp5/pOvyFqN50Jnp8yQmzo0O7qa3jslb/pNIclt1GmWfodo4cQoXjeXSrw07Cfe0CsNfyHToYuvC7H9u7q5RrIxU0wZzdrwqcb9IQb4mWc8/22Fk/sOi6WqmvChynUuMzwx9GAjj8NFpvD0x3YV8fneaPsVp4xVzR06/lFisMRrLTyuG/WW9AxtnB5+hu5+Pk4w3Af+7Uf69QsE9HQUVkoDEqM1xeazUt2IrxoToY+8ek2l3B2x7NK97qXgrazIAu0KxUAu/hNr/5EbhKVPMDi7aQ5/4jz9gQ0AmeLFMspeMh0JDKl9GLyRg8fHCBLxLFEf4k7EHt3bY5z5zRPat/XkDGmFnuPzDlpOo5GNfIc6XkaTVbjAszduSrbI7PQHoGz17vt/woffAdlzPhUo+66w6wNVKVScAACW/YvSO4facqY=
+  - secure: ZCuUG923W6x2nOyVXasHTR0be0nNCma4mnaVBVRXIPcZV46fSZQ4cT+solpZOkq48BARisNep5FCB2h7nqZAsAf4CQySLUo63F6NEMkFVh7cqxEJXCJx22OZcCTBTVqPOjnP5QgdIlN7xC3knDHzsvN00rDqgjOoVM8U3dgF05pRRz1RPPnCLI21qrOsbEBDsS8FKAnW+YsqhN1qzvlG47x/iBbzXo0E4M+ZJKa3AG1qiDq6kCIu7NDTUoxiYKgqEgIR/EqdyoRoaDrfoXB3m0OfoKamADwJu8R6vpRY6M2lYGMYrdJQMJouuA5NEni5wQT8dKbFa+lH68W0InGWHwzrWP2wO1/sBUpSS7WqusfAQwZ1SpGbC3pRjm5/B6UterZUPn3z1CMQnddLc2r7yJ4mm/R88lO4c1HDlfTJqjWiRoq4FCWquNBL3uJHmXlorQEPS5s5W0mEn+C+SslxoxQ7PT57O2Ci6CNuKQE6187sJ/eMgrz68Qo2uLYzT5vpZ9pzSpoNA/Lu2xDBh60JJ1tIUJFQujurmW3fAdmESpe423/Cpln6nSVtTy9+iAt5p/m4E8hZvqP0+GBy2mhrBKc9jmnxA0b5slPV8nE1b5BYqBd8Tg9y1qmCUfGVoAXPj/knjVBuy9qIEcm13oVRY0fwgX2ccKHqoRk73BEphio=
+services:
+- docker
+before_install:
+- sudo apt-get update
+- docker-compose --version
+- pip install docker-compose --upgrade
+- docker-compose --version
+install:
+- cd v01/dockerfiles
+- docker-compose -f docker-compose-build.yml build
+- docker-compose -f docker-compose-build.yml up -d
+- docker-compose ps
+before_script:
+- pip install requests
+- pip install docker
+- cd $TRAVIS_BUILD_DIR
+script:
+- bash ./.travis/linters.sh
+- python tests.py
+notifications:
+  slack:
+    rooms:
+    - optimum-team:GycletOWK4Kt95GktwYwfUMp#build
+after_success:
+- cd v01/dockerfiles
+- echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+- docker push trydirect/django-restful:0.1
