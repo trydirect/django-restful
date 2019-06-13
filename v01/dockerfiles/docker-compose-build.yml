@@ -10,6 +10,7 @@ volumes:
 
 services:
   web:
+      image: trydirect/django-restful:0.1
       build: djangorest
       container_name: web
       restart: always
