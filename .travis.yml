@@ -18,6 +18,7 @@ install:
 - cd v01/dockerfiles
 - docker-compose -f docker-compose-build.yml build
 - docker-compose -f docker-compose-build.yml up -d
+- docker-compose exec web python manage.py migrate
 - docker-compose ps
 before_script:
 - pip install requests

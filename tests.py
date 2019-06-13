@@ -26,11 +26,8 @@ time.sleep(3)
 assert nginx.status == 'running'
 
 web = client.containers.get('web')
-assert 'uWSGI http bound on :8080' in web.logs()
-assert 'spawned uWSGI master process' in web.logs()
+assert 'uWSGI http bound on :8000' in web.logs()
 assert 'spawned uWSGI worker 1' in web.logs()
-assert 'spawned uWSGI worker 2' in web.logs()
-assert 'INFO success: web-00 entered RUNNING state' in web.logs()
 assert web.status == 'running'
 
 db = client.containers.get('db')
@@ -39,6 +36,6 @@ cnf = db.exec_run('psql -U django -h 127.0.0.1 -p 5432 -c "select 1"')
 log = db.logs()
 assert "database system is ready to accept connections" in log.decode()
 
-response = requests.get("http://localhost")
+response = requests.get("http://localhost/users/?format=json")
 assert response.status_code == 200
-assert "<title>Oscar - Sandbox</title>" in response.text
+assert '{"count":0,"next":null,"previous":null,"results":[]}' in response.text
