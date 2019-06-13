@@ -16,13 +16,11 @@ ENV LC_ALL en_US.UTF-8
 RUN PYTHON=python3.7 uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python37"
 RUN mv python37_plugin.so /usr/lib/uwsgi/plugins/python37_plugin.so
 
-
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-COPY supervisord.conf /etc/supervisord.conf
-#
+COPY build-conf/supervisord/django_restful.conf /etc/supervisor/conf.d/django_restful.conf
 WORKDIR /app/djangorest
 RUN django-admin startapp quickstart
 COPY src/backend/djangorest /app/djangorest

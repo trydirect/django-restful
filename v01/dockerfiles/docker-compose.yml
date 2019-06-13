@@ -15,8 +15,8 @@ services:
       container_name: web
       restart: always
       entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
-      volumes:
-        - ./djangorest/build-conf/supervisord/django_restful.conf:/etc/supervisor/conf.d/django_restful.conf
+#      volumes:
+#        - ./djangorest/build-conf/supervisord/django_restful.conf:/etc/supervisor/conf.d/django_restful.conf
       links:
        - db
        - mq
