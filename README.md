@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/trydirect/django-restful.svg?branch=master)](https://travis-ci.com/trydirect/django-restful)
-[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)![Docker Stars](https://img.shields.io/docker/stars/trydirect/django-restful.svg)
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+![Docker Stars](https://img.shields.io/docker/stars/trydirect/django-restful.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/trydirect/django-restful.svg)
 ![Docker Automated](https://img.shields.io/docker/cloud/automated/trydirect/django-restful.svg)
 ![Docker Build](https://img.shields.io/docker/cloud/build/trydirect/django-restful.svg)
@@ -45,7 +46,7 @@ $ docker-compose exec web python manage.py migrate
 
 3. Now, let's check it out
 ```
-$ curl -i curl -i localhost/users/
+$ curl -i localhost/users/
 HTTP/1.1 200 OK
 Server: nginx/1.16.0
 Date: Thu, 13 Jun 2019 10:39:46 GMT
@@ -59,8 +60,12 @@ X-Frame-Options: SAMEORIGIN
 {"count":0,"next":null,"previous":null,"results":[]}
 ```
 
+4. Let's check running containers
+
 ```
 $ docker-compose ps
+```
+
 ```
 Name                  Command                          State          Ports
 ------------------------------------------------------------------------------------------------------------------------------
@@ -73,6 +78,13 @@ nginx                 /usr/bin/supervisord -c /e ...   Up             0.0.0.0:44
 redis                 docker-entrypoint.sh redis ...   Up (healthy)   6379/tcp
 web                   /usr/bin/supervisord -c /e ...   Up             0.0.0.0:8000->8000/tcp   
 ```
+
+5. Run tests
+
+```
+$ python ../../tests.py
+```
+
 
 ## Generate Api Doc
 ```.env
