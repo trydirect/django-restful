@@ -1,0 +1,20 @@
+filebeat.prospectors:
+- type: log
+  enabled: true
+  paths:
+    - /var/lib/docker/containers/*/*.log
+  processors:
+    - add_docker_metadata: ~
+  fields:
+      enviroment: dev
+      instance: demo.local
+      project: symfony-rest
+  json.message_key: log
+  fields_under_root: true
+  exclude_lines: ['.*container_cadvisor.*']
+  exclude_lines: ['*cadvisor*']
+  exclude_lines: ['cadvisor']
+  exclude_files: ['.gz$']
+#----------------------------- Logstash output --------------------------------
+output.logstash:
+  hosts: ["logstash:5044"]

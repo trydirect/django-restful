@@ -1,0 +1,173 @@
+version: '2.1'
+
+volumes:
+  db:
+    driver: local
+  elasticdata:
+    driver: local
+  redis-data:
+    driver: local
+
+services:
+  web:
+      build: djangorest
+      container_name: web
+      restart: always
+      entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
+      volumes:
+        - ./djangorest/build-conf/supervisor/django_restful.conf:/etc/supervisor/conf.d/django_restful.conf
+      links:
+       - db
+       - mq
+      depends_on:
+        - db
+        - mq
+      ports:
+       - "8000:8000"
+      env_file: .env
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "10m"
+          tag: "web"
+
+  elasticsearch:
+    image: elasticsearch:5.4.3
+    restart: always
+    container_name: elasticsearch
+    environment:
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      discovery.type: "single-node"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    links:
+      - web
+    depends_on:
+      - web
+    volumes:
+      - elasticdata:/usr/share/elasticsearch/data
+      - ./djangorest/build-conf/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9300:9300"
+
+  kibana:
+      image: kibana:5.4.3
+      restart: always
+      container_name: kibana
+      depends_on:
+        - elasticsearch
+      ports:
+        - "5601:5601"
+      links:
+        - elasticsearch
+      env_file:
+        - .env
+      volumes:
+        - ./djangorest/build-conf/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+
+  logstash:
+    build: ./djangorest/build-conf/logstash
+    container_name: logstash
+    restart: always
+    environment:
+      LS_JAVA_OPTS: "-Xms1g -Xmx4g"
+    ports:
+      - "5044"
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:6.7.1
+    restart: always
+    container_name: filebeat
+    user: 0:0
+    env_file:
+      - .env
+    volumes:
+      - ./djangorest/build-conf/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - logstash
+
+  redis:
+      image: redis:latest
+      restart: always
+      container_name: redis
+      env_file:
+        - .env
+      volumes:
+        - redis-data:/data
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "10m"
+          tag: "redis"
+
+  db:
+    image: postgres:9.6
+    container_name: db
+    restart: always
+    ports:
+      #- "5432:5432" - publish port to the world.
+      - "5432"
+    env_file:
+      - .env
+    volumes:
+      - db:/var/lib/postgresql/data/pgdata
+      - ./djangorest/build-conf/postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        tag: "db"
+
+
+# entry point
+  nginx:
+    image: ${REGISTRY}trydirect/nginx:latest
+    container_name: nginx
+    restart: always
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - web
+      - kibana
+    volumes:
+      - ./djangorest/build-conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./djangorest/build-conf/nginx/conf.d:/etc/nginx/conf.d
+      - ./djangorest/build-conf/supervisord:/etc/supervisor/conf.d/
+    entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        tag: "nginx"
+
+  # basic data bus for interaction between servers
+  mq:
+    container_name: mq
+    image: rabbitmq:3-management
+    restart: always
+    env_file:
+      - .env
+    ports:
+      # note! from others containers need connect to 5672 port, not 2172
+      # 2172 using for debug
+      - "2172:5672"
+      - "5672"
+      - "21072:15672"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        tag: "rabbitm"
