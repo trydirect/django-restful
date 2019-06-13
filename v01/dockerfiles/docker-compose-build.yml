@@ -25,11 +25,7 @@ services:
       ports:
        - "8000:8000"
       env_file: .env
-      logging:
-        driver: "json-file"
-        options:
-          max-size: "10m"
-          tag: "web"
+
 
   elasticsearch:
     image: elasticsearch:5.4.3
@@ -104,11 +100,6 @@ services:
         - .env
       volumes:
         - redis-data:/data
-      logging:
-        driver: "json-file"
-        options:
-          max-size: "10m"
-          tag: "redis"
 
   db:
     image: postgres:9.6
@@ -122,12 +113,6 @@ services:
     volumes:
       - db:/var/lib/postgresql/data/pgdata
       - ./djangorest/build-conf/postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        tag: "db"
-
 
 # entry point
   nginx:
@@ -147,11 +132,6 @@ services:
       - ./djangorest/build-conf/nginx/conf.d:/etc/nginx/conf.d
       - ./djangorest/build-conf/supervisord:/etc/supervisor/conf.d/
     entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        tag: "nginx"
 
   # basic data bus for interaction between servers
   mq:
@@ -166,8 +146,3 @@ services:
       - "2172:5672"
       - "5672"
       - "21072:15672"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        tag: "rabbitm"
