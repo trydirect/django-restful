@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/trydirect/django-restful.svg?branch=master)](https://travis-ci.com/trydirect/django-restful)
-![Docker Stars](https://img.shields.io/docker/stars/trydirect/django-restful.svg)
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)![Docker Stars](https://img.shields.io/docker/stars/trydirect/django-restful.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/trydirect/django-restful.svg)
 ![Docker Automated](https://img.shields.io/docker/cloud/automated/trydirect/django-restful.svg)
 ![Docker Build](https://img.shields.io/docker/cloud/build/trydirect/django-restful.svg)
@@ -9,8 +9,7 @@
 
 Django Restful API backend template - project generator/development environment.
 Can be used by Python developers for quick start on building Restful API's using Django framework and django-rest-framework.
-This project is aimed to include most useful tools like RabbitMQ, Redis, Elasticsearch, Kibana, Apidoc 
-This project allows you to setup development environment with a single docker-compose command
+This project is aimed to simmplify development environment setup and includes many useful dev tools like RabbitMQ, Redis, Elasticsearch, Kibana, Apidoc 
 
 
 ## Stack includes
@@ -68,7 +67,7 @@ Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE
 The final project structure will look like this: 
 
 $ docker-compose ps
-
+```
 Name                  Command                          State          Ports
 ------------------------------------------------------------------------------------------------------------------------------
 db                    docker-entrypoint.sh postgres    Up (healthy)   5432/tcp
@@ -80,7 +79,6 @@ nginx                 /usr/bin/supervisord -c /e ...   Up             0.0.0.0:44
 redis                 docker-entrypoint.sh redis ...   Up (healthy)   6379/tcp
 web                   /usr/bin/supervisord -c /e ...   Up             0.0.0.0:8000->8000/tcp   
 ```
-
 
 ## Generate Api Doc
 ```.env
