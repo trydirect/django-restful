@@ -1,0 +1,15 @@
+elasticsearch.url: "http://elasticsearch:9200"
+elasticsearch.username: "admin"
+elasticsearch.password: "qwer123"
+server.host: "0.0.0.0"
+server.port: 5601
+
+xpack:
+  security:
+    enabled: true
+  graph:
+    enabled: false
+  monitoring:
+    enabled: false
+  ml:
+    enabled: false
