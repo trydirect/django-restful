@@ -15,7 +15,7 @@ services:
       restart: always
       entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
       volumes:
-        - ./djangorest/build-conf/supervisor/django_restful.conf:/etc/supervisor/conf.d/django_restful.conf
+        - ./djangorest/build-conf/supervisord/django_restful.conf:/etc/supervisor/conf.d/django_restful.conf
       links:
        - db
        - mq
@@ -25,6 +25,11 @@ services:
       ports:
        - "8000:8000"
       env_file: .env
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "10m"
+          tag: "web"
 
 
   elasticsearch:
@@ -100,19 +105,38 @@ services:
         - .env
       volumes:
         - redis-data:/data
+      healthcheck:
+        timeout: 5s
+        interval: 5s
+        retries: 5
+        test:
+          - "CMD"
+          - "bash"
+          - "-c"
+          - "exec 3<> /dev/tcp/127.0.0.1/6379 && echo PING >&3 && head -1 <&3 | grep PONG"
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "10m"
+          tag: "redis"
 
   db:
-    image: postgres:9.6
+    image: postgres:11.2
     container_name: db
     restart: always
     ports:
-      #- "5432:5432" - publish port to the world.
-      - "5432"
+      - 5432
     env_file:
       - .env
+    command: postgres -c hba_file=/etc/pg_hba.conf
     volumes:
-      - db:/var/lib/postgresql/data/pgdata
-      - ./djangorest/build-conf/postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./configs/postgresql/pg_hba.conf:/etc/pg_hba.conf
+      - db:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        tag: "db"
 
 # entry point
   nginx:
@@ -130,8 +154,13 @@ services:
     volumes:
       - ./djangorest/build-conf/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./djangorest/build-conf/nginx/conf.d:/etc/nginx/conf.d
-      - ./djangorest/build-conf/supervisord:/etc/supervisor/conf.d/
+      - ./djangorest/build-conf/supervisord/nginx.conf:/etc/supervisor/conf.d/nginx.conf
     entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        tag: "nginx"
 
   # basic data bus for interaction between servers
   mq:
@@ -146,3 +175,13 @@ services:
       - "2172:5672"
       - "5672"
       - "21072:15672"
+    healthcheck:
+      timeout: 5s
+      interval: 5s
+      retries: 5
+      test: ["CMD", "rabbitmqctl", "status"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        tag: "rabbitmq"

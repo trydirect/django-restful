@@ -15,7 +15,7 @@ services:
       restart: always
       entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
       volumes:
-        - ./djangorest/build-conf/supervisor/django_restful.conf:/etc/supervisor/conf.d/django_restful.conf
+        - ./djangorest/build-conf/supervisord/django_restful.conf:/etc/supervisor/conf.d/django_restful.conf
       links:
        - db
        - mq
@@ -102,17 +102,17 @@ services:
         - redis-data:/data
 
   db:
-    image: postgres:9.6
+    image: postgres:11.2
     container_name: db
     restart: always
     ports:
-      #- "5432:5432" - publish port to the world.
-      - "5432"
+      - 5432
     env_file:
       - .env
+    command: postgres -c hba_file=/etc/pg_hba.conf
     volumes:
-      - db:/var/lib/postgresql/data/pgdata
-      - ./djangorest/build-conf/postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./configs/postgresql/pg_hba.conf:/etc/pg_hba.conf
+      - db:/var/lib/postgresql/data
 
 # entry point
   nginx:
@@ -130,7 +130,7 @@ services:
     volumes:
       - ./djangorest/build-conf/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./djangorest/build-conf/nginx/conf.d:/etc/nginx/conf.d
-      - ./djangorest/build-conf/supervisord:/etc/supervisor/conf.d/
+      - ./djangorest/build-conf/supervisord/nginx.conf:/etc/supervisor/conf.d/nginx.conf
     entrypoint: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf -n
 
   # basic data bus for interaction between servers

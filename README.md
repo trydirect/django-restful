@@ -40,32 +40,26 @@ $ git clone "https://github.com/trydirect/django-restful.git"
 ```sh
 $ cd django-restful/v01/dockerfiles
 $ docker-compose up -d
+$ docker-compose exec web python manage.py migrate
 ```
+
 3. Now, let's check it out
 ```
-$ curl -i localhost/api/v1/hello
+$ curl -i curl -i localhost/users/
 HTTP/1.1 200 OK
-Server: nginx/1.14.2
-Date: Fri, 24 May 2019 15:33:02 GMT
+Server: nginx/1.16.0
+Date: Thu, 13 Jun 2019 10:39:46 GMT
 Content-Type: application/json
-Content-Length: 14
+Content-Length: 52
 Connection: keep-alive
-Access-Control-Allow-Origin: *
-Access-Control-Allow-Headers: X-Requested-With, Content-Type, X-Custom-Header
-Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE
+Vary: Accept, Cookie
+Allow: GET, POST, HEAD, OPTIONS
+X-Frame-Options: SAMEORIGIN
 
-"Hello World"
+{"count":0,"next":null,"previous":null,"results":[]}
 ```
 
-
-## Features
-
-* Python web server using Nginx and uWSGI
-* Nginx plus HTTPS certificate generation with Let's Encrypt 
-
-
-The final project structure will look like this: 
-
+```
 $ docker-compose ps
 ```
 Name                  Command                          State          Ports
