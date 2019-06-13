@@ -18,12 +18,8 @@ RUN mv python37_plugin.so /usr/lib/uwsgi/plugins/python37_plugin.so
 
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY build-conf/supervisord/django_restful.conf /etc/supervisor/conf.d/django_restful.conf
 WORKDIR /app/djangorest
 RUN django-admin startapp quickstart
 COPY src/backend/djangorest /app/djangorest
-COPY configs/apidoc.json /app/djangorest
-COPY scripts/apidoc.sh  /app/djangorest
-RUN chmod +x /app/djangorest/apidoc.sh

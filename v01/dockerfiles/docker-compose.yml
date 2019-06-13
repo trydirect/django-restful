@@ -153,6 +153,7 @@ services:
       - web
       - kibana
     volumes:
+      - ./djangorest/src/backend/djangorest/static:/usr/share/nginx/html
       - ./djangorest/build-conf/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./djangorest/build-conf/nginx/conf.d:/etc/nginx/conf.d
       - ./djangorest/build-conf/supervisord/nginx.conf:/etc/supervisor/conf.d/nginx.conf

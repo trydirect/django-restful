@@ -76,7 +76,7 @@ web                   /usr/bin/supervisord -c /e ...   Up             0.0.0.0:80
 
 ## Generate Api Doc
 ```.env
-$ ./scripts/apidoc.sh
+$ sh ./djangorest/scripts/apidoc.sh
 ```
 
 
