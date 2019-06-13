@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/trydirect/django-restful.svg?branch=master)](https://travis-ci.com/trydirect/django-restful)
-[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)![Docker Stars](https://img.shields.io/docker/stars/trydirect/django-restful.svg)
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
+![Docker Stars](https://img.shields.io/docker/stars/trydirect/django-restful.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/trydirect/django-restful.svg)
 ![Docker Automated](https://img.shields.io/docker/cloud/automated/trydirect/django-restful.svg)
 ![Docker Build](https://img.shields.io/docker/cloud/build/trydirect/django-restful.svg)
@@ -61,7 +62,7 @@ X-Frame-Options: SAMEORIGIN
 
 ```
 $ docker-compose ps
-```
+
 Name                  Command                          State          Ports
 ------------------------------------------------------------------------------------------------------------------------------
 db                    docker-entrypoint.sh postgres    Up (healthy)   5432/tcp
