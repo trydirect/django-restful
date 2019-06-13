@@ -46,7 +46,7 @@ $ docker-compose exec web python manage.py migrate
 
 3. Now, let's check it out
 ```
-$ curl -i curl -i localhost/users/
+$ curl -i localhost/users/
 HTTP/1.1 200 OK
 Server: nginx/1.16.0
 Date: Thu, 13 Jun 2019 10:39:46 GMT
@@ -60,9 +60,13 @@ X-Frame-Options: SAMEORIGIN
 {"count":0,"next":null,"previous":null,"results":[]}
 ```
 
+4. Let's check running containers
+
 ```
 $ docker-compose ps
+```
 
+```
 Name                  Command                          State          Ports
 ------------------------------------------------------------------------------------------------------------------------------
 db                    docker-entrypoint.sh postgres    Up (healthy)   5432/tcp
@@ -74,6 +78,13 @@ nginx                 /usr/bin/supervisord -c /e ...   Up             0.0.0.0:44
 redis                 docker-entrypoint.sh redis ...   Up (healthy)   6379/tcp
 web                   /usr/bin/supervisord -c /e ...   Up             0.0.0.0:8000->8000/tcp   
 ```
+
+5. Run tests
+
+```
+$ python ../../tests.py
+```
+
 
 ## Generate Api Doc
 ```.env
