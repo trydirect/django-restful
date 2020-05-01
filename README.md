@@ -92,6 +92,12 @@ $ sh ./djangorest/scripts/apidoc.sh
 ```
 
 
+## Quick deployment to cloud
+##### Amazon AWS, Digital Ocean, Hetzner and others
+[<img src="https://img.shields.io/badge/quick%20deploy-%40try.direct-brightgreen.svg">](https://try.direct/server/user/deploy/ImRqYW5nby1yZXN0ZnVsfDZ8MzEi.EIJLoA.ThfmBQizayK8MRVg_VSlowGa98w/)
+
+
+
 ## Contributing
 
 1. Fork it (https://github.com/trydirect/django-restful/fork)
