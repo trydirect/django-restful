@@ -28,7 +28,7 @@ notifications:
   slack:
     rooms:
     - optimum-team:"$SLACK"#build
-after_success:
-- cd v01/dockerfiles
-- echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-- docker push trydirect/django-restful:0.1
+#after_success:
+#- cd v01/dockerfiles
+#- echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+#- docker push trydirect/django-restful:unstable
