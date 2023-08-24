@@ -94,7 +94,7 @@ $ sh ./djangorest/scripts/apidoc.sh
 
 ## Quick deployment to cloud
 ##### Amazon AWS, Digital Ocean, Hetzner and others
-[<img src="https://img.shields.io/badge/quick%20deploy-%40try.direct-brightgreen.svg">](https://try.direct/server/user/deploy/ImRqYW5nby1yZXN0ZnVsfDZ8NTEi.F8jIUg.ot5dr1P7Z1FeZe_af7d5vpJ1jd4/)
+[<img src="https://img.shields.io/badge/quick%20deploy-%40try.direct-brightgreen.svg">](https://try.direct/server/user/deploy/ImRqYW5nby1yZXN0ZnVsfDZ8NTMi.F8jJ6A.-Xv3G-mUxf2xWxxJ65wo6NRYleI/)
 
 
 
